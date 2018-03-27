@@ -41,6 +41,7 @@ contract XCharge {
             return;
 
         funds[user] += msg.value;
+        emit Refund(user, msg.value);
     }
 
     event Deposit(address indexed user, uint256 amount);
