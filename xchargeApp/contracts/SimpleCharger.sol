@@ -22,7 +22,7 @@ contract SimpleCharger {
     }
 
     function deposit(address user) public payable {
-        if (msg.value == 0)
+        if (msg.value < 1)
             return;
 
         funds[user] += msg.value;
@@ -56,11 +56,11 @@ contract SimpleCharger {
     // VFT
     function showBalance() public view
         returns(uint256 value) {
-        
+
         return address(this).balance;
     }
 
-    //VFT
+    // VFT
     function showFundsOf(address user) public view
         returns(uint256 value) {
 
