@@ -1,18 +1,12 @@
 
-var http = require('http'),
-    fs = require('fs');
+
+const express = require('express');
+var path = require('path');
+const app = express();
 
 
-fs.readFile('index.html', function (err, html) {
-    if (err) {
-        throw err;
-    }
-    http.createServer(function (request, response) {
-        response.writeHeader(200, { "Content-Type": "text/html" });
-        response.write(html);
-        response.end();
-    }).listen(3000, (err) => {
-        if (err) throw err;
-        console.log('Ready On localhost:3000');
-    })
-});
+
+// Serve up content from public directory
+app.use(express.static(__dirname + '/public'));
+
+app.listen(3000, () => console.log('Example app listening on port 3000!'))
