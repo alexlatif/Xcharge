@@ -1,7 +1,7 @@
 const Web3 = require('web3');
 const abi = require('./abi');
 
-const web3 = new Web3(null);
+const web3 = new Web3();
 
 const contract = new web3.eth.Contract(abi.abi);
 

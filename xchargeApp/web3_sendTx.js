@@ -1,18 +1,7 @@
 const Web3 = require('web3');
 const Tx = require('ethereumjs-tx');
-const xchargeC = require('./Xcharge_web3');
 
-const web3 = new Web3(new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545'));
-
-// NeedProvider
-
-// the address that will send the test transaction
-const addressFrom = '0x627306090abaB3A6e1400e9345bC60c78a8BEf57';
-const privKey =
-  'c87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3';
-
-// the destination address (contract)
-//const addressTo = '0x1463500476a3ADDa33ef1dF530063fE126203186';
+const web3 = new Web3();
 
 async function createTx(addressFrom, addressTo, data, valueInEth) {
   const nonce = await web3.eth.getTransactionCount(addressFrom);
@@ -64,28 +53,30 @@ async function sendSignedTx(
     web3.eth
       .sendSignedTransaction('0x' + signedTx)
       .on('receipt', function(receipt) {
-        console.log('YEAH');
         resolve(receipt);
       })
       .on('error', function(error) {
-        console.log(':(');
         reject(error);
       });
   });
 }
 
-async function deploy() {
-  const deploy = xchargeC.depositFunds();
-
+async function send(
+  addressFrom,
+  addressTo,
+  encodeData,
+  valueInEth,
+  addressFromPrivateKey,
+  web3Provider
+) {
+  web3.setProvider(web3Provider);
   return await sendSignedTx(
     addressFrom,
-    '0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84',
-    deploy,
-    4,
-    privKey
+    addressTo,
+    encodeData,
+    valueInEth,
+    addressFromPrivateKey
   );
 }
 
-deploy().then(function() {
-  console.log(':)');
-});
+module.exports = send;
