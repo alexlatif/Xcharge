@@ -43,10 +43,15 @@ async function sendSignedTx(
   addressFrom,
   addressTo,
   encodeData,
-  valueInEth,
+  valueInFinney,
   addressFromPrivateKey
 ) {
-  const txData = await createTx(addressFrom, addressTo, encodeData, valueInEth);
+  const txData = await createTx(
+    addressFrom,
+    addressTo,
+    encodeData,
+    valueInFinney
+  );
   const signedTx = signTx(txData, addressFromPrivateKey);
 
   return new Promise(function(resolve, reject) {
@@ -65,7 +70,7 @@ async function send(
   addressFrom,
   addressTo,
   encodeData,
-  valueInEth,
+  valueInFinney,
   addressFromPrivateKey,
   web3Provider
 ) {
@@ -74,7 +79,7 @@ async function send(
     addressFrom,
     addressTo,
     encodeData,
-    valueInEth,
+    valueInFinney,
     addressFromPrivateKey
   );
 }

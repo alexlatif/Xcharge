@@ -6,12 +6,12 @@ const sendTx = require('./web3_sendTx');
 
 async function test() {
   const method = xchargeC.depositFunds();
-
+  const valueInFinney = 4;
   return await sendTx(
     accounts.user.test.address,
     accounts.contract.test_kovan,
     method,
-    4,
+    valueInFinney,
     accounts.user.test.private_key,
     new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545')
   );
