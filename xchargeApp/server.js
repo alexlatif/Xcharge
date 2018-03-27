@@ -7,33 +7,40 @@ const app = express();
 // Serve up content from public directory
 app.use(express.static(__dirname + '/public'));
 
+var mqtt = require('mqtt')
+var client = mqtt.connect('mqtt://test.mosquitto.org')
+
+
 var kovanContract;
 var ropstenContract;
 var rinkebyContract;
 
-var timeOut;
-var runningPi = ''
-
 app.get('/ropsten', (req, res) => {
     runningPi = 'A';
+    console.log('kovan node to ropsten')
     //TODO: call kovan to extract deposit
 
     //TODO: take deposit to ropsten 
-    // call ropsten node
+
+    client.publish('flowA', '1')
 })
+
 
 app.get('/rinkeby', (req, res) => {
     runningPi = 'B';
-    // call kovan to extract deposit
+    console.log('kovan node to rinkeby')
+    //TODO: call kovan to extract deposit
+    //TODO:  take deposit to rinkeby
 
-    // take deposit to rinkeby 
-    // call rinkeby node
+    client.publish('flowB', '1')
 })
 
 app.get('/stop', (req, res) => {
-    // stop running pi
+    console.log('stop')
+    client.publish('flowA', '0')
+    client.publish('flowB', '0')
 
-    // reclaim remaining funds
+    //TODO:  reclaim remaining funds
 })
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
