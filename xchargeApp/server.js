@@ -18,22 +18,22 @@ app.get('/ropsten', (req, res) => {
     runningPi = 'A';
     //TODO: call kovan to extract deposit
 
-    //TODO: take deposit to ropsten
-    //TODO: call ropsten node
+    //TODO: take deposit to ropsten 
+    // call ropsten node
 })
 
 app.get('/rinkeby', (req, res) => {
     runningPi = 'B';
-    //TODO: call kovan to extract deposit
+    // call kovan to extract deposit
 
-    //TODO: take deposit to rinkeby 
-    //TODO: call rinkeby node
+    // take deposit to rinkeby 
+    // call rinkeby node
 })
 
 app.get('/stop', (req, res) => {
-    //TODO: stop running pi
+    // stop running pi
 
-    //TODO: reclaim remaining funds
+    // reclaim remaining funds
 })
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
