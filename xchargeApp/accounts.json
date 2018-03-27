@@ -1,0 +1,22 @@
+{
+  "user": {
+    "customer": {
+      "address": "0xB9eC7a901493951df7f4397B46aE56D40D946a7a",
+      "private_key": "d58bf8bc1dcd64e755e23fbad0e8fbfd9a9ae5d41a4a010a2df31b5d76fea9a9"
+    },
+    "node": {
+      "address": "0xd9D05191E84843a2742e555c9d968F623239f669",
+      "private_key": "8f57a25e7e6dfa30a5a7a9d2721f1f68b81f6b8afaf7a91cef61813b116e985b"
+    },
+    "test": {
+      "address": "0x627306090abaB3A6e1400e9345bC60c78a8BEf57",
+      "private_key": "c87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3"
+    }
+  },
+  "contract": {
+    "ropsten": "0x13e0825fb29bd62f89f24b0a48f48fd6ccc712c8",
+    "kovan": "0x44c46f8c9bef46a63ce1a45811656bd2668eb2dc",
+    "rinkeby": "0x48462577de7ed5bc98719f5830b7afd445f2c34b",
+    "test_kovan": "0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84"
+  }
+}
