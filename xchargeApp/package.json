@@ -1,0 +1,19 @@
+{
+    "name": "smart-contract-kickstarter",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "server": "node server.js"
+    },
+    "author": "Alireza Shahabi",
+    "license": "MIT",
+    "dependencies": {
+        "body-parser": "^1.17.2",
+        "body-parser-json": "^1.9.2",
+        "web3": "^1.0.0-beta.26"
+    }
+}
