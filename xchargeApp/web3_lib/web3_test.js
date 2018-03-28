@@ -38,7 +38,7 @@ async function testRead() {
   );
 }
 
-testRead();
+//testRead();
 // lib
 //   .deposit(
 //     lib.user.test.address,
@@ -90,9 +90,12 @@ testRead();
 //       });
 //   });
 
-// lib.depositFunds(lib.user.test.address, 4).then(function() {
-//   console.log('depositFunds -> OK.');
-// });
+async function depositCustomerFunds() {
+  const reuslt = await lib.depositFunds(lib.user.customer.address, 4);
+  console.log(reuslt);
+}
+
+//depositCustomerFunds();
 // lib.reclaimFunds(lib.user.test.address).then(function() {
 //   console.log('reclaimFunds -> OK.');
 // });

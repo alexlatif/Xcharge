@@ -5,17 +5,45 @@ const sendTx = require('./web3_sendTx');
 const read = require('./web3_call');
 const accounts = require('./accounts');
 
-const kovanProvider = new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545');
-const kovanContract = accounts.contract.test_kovan_x_charge;
+const isTest = true;
 
-const ropstenProvider = new Web3.providers.HttpProvider(
-  'https://ropsten.infura.io/DCU9J2Po6i6WwVourC8M'
-);
-ropstenContract = accounts.contract.ropsten;
-const rinkebyProvider = new Web3.providers.HttpProvider(
-  'https://rinkeby.infura.io/DCU9J2Po6i6WwVourC8M'
-);
-rinkebyContract = accounts.contract.rinkeby;
+let kovanProvider = null;
+let kovanContract = null;
+let ropstenProvider = null;
+let ropstenContract = null;
+let rinkebyProvider = null;
+let rinkebyContract = null;
+let nodeSender = null;
+
+if (isTest) {
+  kovanProvider = new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545');
+  kovanContract = accounts.contract.test_kovan_x_charge;
+
+  ropstenProvider = new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545');
+  ropstenContract = accounts.contract.test_kovan_simple_charger;
+
+  rinkebyProvider = new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545');
+  rinkebyContract = accounts.contract.test_kovan_simple_charger;
+
+  nodeSender = accounts.user.test.address;
+} else {
+  kovanProvider = new Web3.providers.HttpProvider(
+    'https://kovan.infura.io/DCU9J2Po6i6WwVourC8M'
+  );
+  kovanContract = accounts.contract.kovan;
+
+  ropstenProvider = new Web3.providers.HttpProvider(
+    'https://ropsten.infura.io/DCU9J2Po6i6WwVourC8M'
+  );
+  ropstenContract = accounts.contract.ropsten;
+
+  rinkebyProvider = new Web3.providers.HttpProvider(
+    'https://rinkeby.infura.io/DCU9J2Po6i6WwVourC8M'
+  );
+  rinkebyContract = accounts.contract.rinkeby;
+
+  nodeSender = accounts.user.node.address;
+}
 
 async function sendTxToKovan(from, privateKey, method, valueInFinney) {
   return await sendTx(
@@ -109,7 +137,7 @@ async function reclaimFunds(sender) {
 //  amount: unit256
 async function useFunds(user, amount) {
   const method = xChargeContract.useFunds(user, amount);
-  const sender = accounts.user.node.address;
+  const sender = nodeSender;
   const fromPrivateKey = getPrivateKey(sender);
 
   return await sendTxToKovan(sender, fromPrivateKey, method, null);
@@ -129,7 +157,7 @@ async function refund(sender, valueInFinney, user) {
 // chain: ropsten | rinkeby
 async function kind(chain) {
   const method = simpleChargeContract.kind();
-  const sender = accounts.user.node.address;
+  const sender = nodeSender;
 
   let energyType = null;
   if (chain === 'ropsten') {
@@ -152,7 +180,7 @@ async function kind(chain) {
 // chain: ropsten | rinkeby
 async function name(chain) {
   const method = simpleChargeContract.name();
-  const sender = accounts.user.node.address;
+  const sender = nodeSender;
 
   if (chain === 'ropsten') {
     return await callFromRopsten(sender, method, null, 'string');
@@ -164,7 +192,7 @@ async function name(chain) {
 // chain: ropsten | rinkeby
 async function rate(chain) {
   const method = simpleChargeContract.rate();
-  const sender = accounts.user.node.address;
+  const sender = nodeSender;
 
   if (chain === 'ropsten') {
     return await callFromRopsten(sender, method, null, 'uint256');
@@ -176,7 +204,7 @@ async function rate(chain) {
 // chain: ropsten | rinkeby
 async function showBalance(chain) {
   const method = simpleChargeContract.showBalance();
-  const sender = accounts.user.node.address;
+  const sender = nodeSender;
 
   if (chain === 'ropsten') {
     return await callFromRopsten(sender, method, null, 'uint256');
@@ -189,7 +217,7 @@ async function showBalance(chain) {
 // chain: ropsten | rinkeby
 async function showFundsOf(user, chain) {
   const method = simpleChargeContract.showFundsOf(user);
-  const sender = accounts.user.node.address;
+  const sender = nodeSender;
 
   if (chain === 'ropsten') {
     return await callFromRopsten(sender, method, null, 'uint256');
@@ -247,7 +275,7 @@ async function deposit(sender, valueInFinney, user, chain) {
 // chain: ropsten | rinkeby
 async function reclaim(user, chain) {
   const method = simpleChargeContract.reclaim(user);
-  const sender = accounts.user.node.address;
+  const sender = nodeSender;
   const privateKey = getPrivateKey(sender);
 
   if (chain === 'ropsten') {
