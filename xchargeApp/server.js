@@ -17,6 +17,7 @@ var customer = require('./web3_lib/accounts.json').user.customer.address;
 var timeout;
 var rate;
 var value;
+var ts1;
 
 app.get('/ropsten', async (req, res) => {
     console.log('kovan node to ropsten')
@@ -37,7 +38,7 @@ app.get('/ropsten', async (req, res) => {
 
     console.log('2');
     // time stamp in unix
-    var ts1 = Math.round((new Date()).getTime() / 1000);
+    ts1 = Math.round((new Date()).getTime() / 1000);
 
     await funcLib.startCharging(xbanter, customer, ts1, chain)
 
@@ -45,11 +46,11 @@ app.get('/ropsten', async (req, res) => {
 
     console.log('3');
 
-    timeout = setTimeout(async () => {
+    timeout = setTimeout(() => {
         client.publish('flowA', '0')
         var ts2 = Math.round((new Date()).getTime() / 1000);
         var sendAmount = value / rate;
-        await funcLib.stopCharging(xbanter, customer, sendAmount, ts2, chain);
+        funcLib.stopCharging(xbanter, customer, sendAmount, ts2, chain);
         console.log('4');
     }, timeAvailable);
 
@@ -74,17 +75,17 @@ app.get('/rinkeby', async (req, res) => {
     await funcLib.deposit(xbanter, finneyAmount, customer, chain)
 
     // time stamp in unix
-    var ts1 = Math.round((new Date()).getTime() / 1000);
+    ts1 = Math.round((new Date()).getTime() / 1000);
 
     await funcLib.startCharging(xbanter, customer, ts1, chain)
 
     client.publish('flowB', '1')
 
-    timeout = setTimeout(async () => {
+    timeout = setTimeout(() => {
         client.publish('flowB', '0')
         var ts2 = Math.round((new Date()).getTime() / 1000);
         var sendAmount = value / rate;
-        await funcLib.stopCharging(xbanter, customer, sendAmount, ts2, chain)
+        funcLib.stopCharging(xbanter, customer, sendAmount, ts2, chain)
     }, timeAvailable);
 
     res.json({ "success": true })
@@ -96,7 +97,6 @@ app.get('/stop', async (req, res) => {
     client.publish('flowB', '0')
 
     var ts2 = Math.round((new Date()).getTime() / 1000);
-    await funcLib.stopCharging(customer, value, ts2)
 
     console.log('1');
 
@@ -104,7 +104,7 @@ app.get('/stop', async (req, res) => {
     clearTimeout(timeout);
     value = 0;
     rate = 0;
-    await funcLib.stopCharging(customer, sendAmount, ts2)
+    await funcLib.stopCharging(xbanter, customer, sendAmount, ts2)
 
     console.log('2');
 

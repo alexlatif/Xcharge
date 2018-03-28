@@ -64,7 +64,7 @@
             document.getElementById('bBut').style.cssText = 'display: none'
             document.getElementById('stopBut').style.cssText = 'background-color: red; color: white; font-size: 50px;width: 300px;height: 100px; padding-top: 30px; margin-top: 350px; position: absolute; left: 30px;'
             
-            //TODO: wait for payments
+            //TODO: wait for payments + new axios loop
 
             axios.get(url + 'ropsten')
                 .then((response) => {
