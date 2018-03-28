@@ -15,26 +15,38 @@ var kovanContract;
 var ropstenContract;
 var rinkebyContract;
 
+var funcLib = require('./web3_lib/index');
+
 app.get('/ropsten', (req, res) => {
-    runningPi = 'A';
     console.log('kovan node to ropsten')
+    runningPi = 'A';
+    var rate = funcLib.rate('ropsten');
+    var available;
+
     //TODO: Xcharge use funds
+
+   // value availble + rate call
 
     //TODO: simpleCharger deposit (with time stamp?)
 
-    //TODO: deposit calls 1) showFundsOf 2) startedCharging
+    //TODO: deposit -> startedCharging
+
 
     // logic of setTimout to publish stop!! i think it is better to find amountoffunds and divide by rate
     // to get max time
     // if timeout hit Funds[user] = 0
 
     client.publish('flowA', '1')
+    res.json({"success": true})
 })
 
 
 app.get('/rinkeby', (req, res) => {
     runningPi = 'B';
     console.log('kovan node to rinkeby')
+    // var rate = funcLib.rate('rinkeby');
+    var available;
+
     //TODO: Xcharge use funds
 
     //TODO: simpleCharger deposit (with time stamp?)
@@ -47,6 +59,7 @@ app.get('/rinkeby', (req, res) => {
     // if timeout hit Funds[user] = 0
 
     client.publish('flowB', '1')
+    res.json({ "success": true })
 })
 
 app.get('/stop', (req, res) => {
@@ -57,7 +70,12 @@ app.get('/stop', (req, res) => {
     // clears interval
     // find amount using rate * time
     // reset rate and timestamp to zero
-    //TODO:  1)reduce funds 2)reclaim 3)deposit in Xcharge
+    //TODO:  1)stop 2)reduce
+
+    //TODO: stop charging event -> reclaim funds function
+    
+    // TODO: 3)deposit in Xcharge
+    res.json({ "success": true })
 })
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))

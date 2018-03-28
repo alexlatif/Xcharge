@@ -65,9 +65,6 @@
             document.getElementById('stopBut').style.cssText = 'background-color: red; color: white; font-size: 50px;width: 300px;height: 100px; padding-top: 30px; margin-top: 350px; position: absolute; left: 30px;'
             
             axios.get(url + 'ropsten')
-                .then(function (response) {
-                    console.log(response);
-                })
                 .catch(function (error) {
                     console.log(error);
                 });
@@ -80,9 +77,6 @@
             document.getElementById('stopBut').style.cssText = 'background-color: red; color: white; font-size: 50px;width: 300px;height: 100px; padding-top: 30px; margin-top: 350px; position: absolute; left: 30px;'
 
             axios.get(url + 'rinkeby')
-                .then(function (response) {
-                    console.log(response);
-                })
                 .catch(function (error) {
                     console.log(error);
                 });
@@ -95,9 +89,6 @@
             document.getElementById('bBut').style.cssText = '    background-color: white; color: black; height: 100px; width: 100px; font-size: 50px; padding-top: 30px; margin-top: 320px; position: absolute; left: 213px;'
             
             axios.get(url + 'stop')
-                .then(function (response) {
-                    console.log(response);
-                })
                 .catch(function (error) {
                     console.log(error);
                 });

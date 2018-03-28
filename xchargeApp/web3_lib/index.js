@@ -7,13 +7,9 @@ const accounts = require('./accounts');
 
 const kovanProvider = new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545');
 const kovanContract = accounts.contract.test_kovan_x_charge;
-const ropstenProvider = new Web3.providers.HttpProvider(
-  'HTTP://127.0.0.1:8545'
-);
+const ropstenProvider = new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545');
 ropstenContract = accounts.contract.test_kovan_simple_charger;
-const rinkebyProvider = new Web3.providers.HttpProvider(
-  'HTTP://127.0.0.1:8545'
-);
+const rinkebyProvider = new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545');
 rinkebyContract = accounts.contract.test_kovan_simple_charger;
 
 async function sendTxToKovan(from, privateKey, method, valueInFinney) {
