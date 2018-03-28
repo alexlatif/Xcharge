@@ -7,14 +7,15 @@ const accounts = require('./accounts');
 
 const kovanProvider = new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545');
 const kovanContract = accounts.contract.test_kovan_x_charge;
+
 const ropstenProvider = new Web3.providers.HttpProvider(
-  'HTTP://127.0.0.1:8545'
+  'https://ropsten.infura.io/DCU9J2Po6i6WwVourC8M'
 );
-ropstenContract = accounts.contract.test_kovan_simple_charger;
+ropstenContract = accounts.contract.ropsten;
 const rinkebyProvider = new Web3.providers.HttpProvider(
-  'HTTP://127.0.0.1:8545'
+  'https://rinkeby.infura.io/DCU9J2Po6i6WwVourC8M'
 );
-rinkebyContract = accounts.contract.test_kovan_simple_charger;
+rinkebyContract = accounts.contract.rinkeby;
 
 async function sendTxToKovan(from, privateKey, method, valueInFinney) {
   return await sendTx(
@@ -137,9 +138,9 @@ async function kind(chain) {
     energyType = await callFromRinkeby(sender, method, null, 'uint8');
   }
 
-  if (energyType === 0) {
+  if (energyType == 0) {
     energyType = 'Fossil';
-  } else if (energyType === 1) {
+  } else if (energyType == 1) {
     energyType = 'Nuclear';
   } else {
     energyType = 'Green';
