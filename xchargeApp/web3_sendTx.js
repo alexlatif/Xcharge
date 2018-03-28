@@ -3,7 +3,7 @@ const Tx = require('ethereumjs-tx');
 
 const web3 = new Web3();
 
-async function createTx(addressFrom, addressTo, data, valueInEth) {
+async function createTx(addressFrom, addressTo, data, valueInFinney) {
   const nonce = await web3.eth.getTransactionCount(addressFrom);
 
   let txData = {
@@ -17,9 +17,9 @@ async function createTx(addressFrom, addressTo, data, valueInEth) {
     delete txData.to;
   }
 
-  if (valueInEth !== null) {
+  if (valueInFinney !== null) {
     txData = Object.assign(
-      { value: web3.utils.toWei(valueInEth.toString(), 'milliether') },
+      { value: web3.utils.toWei(valueInFinney.toString(), 'milliether') },
       txData
     );
   }
