@@ -13,7 +13,7 @@ async function createTx(addressFrom, addressTo, data, valueInFinney) {
     to: addressTo,
     from: addressFrom,
     data: data,
-    gasPrice: gasPrice * 1.3
+    gasPrice: gasPrice * 1.4
   };
 
   if (txData.to === null) {
