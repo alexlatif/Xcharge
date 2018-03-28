@@ -16,13 +16,13 @@ let rinkebyContract = null;
 let nodeSender = null;
 
 if (isTest) {
-  kovanProvider = new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545');
+  kovanProvider = new Web3.providers.HttpProvider('HTTP://10.125.100.29:8545');
   kovanContract = accounts.contract.test_kovan_x_charge;
 
-  ropstenProvider = new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545');
+  ropstenProvider = new Web3.providers.HttpProvider('HTTP://10.125.100.29:8545');
   ropstenContract = accounts.contract.test_kovan_simple_charger;
 
-  rinkebyProvider = new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545');
+  rinkebyProvider = new Web3.providers.HttpProvider('HTTP://10.125.100.29:8545');
   rinkebyContract = accounts.contract.test_kovan_simple_charger;
 
   nodeSender = accounts.user.test.address;

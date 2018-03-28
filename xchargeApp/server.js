@@ -27,12 +27,15 @@ app.get('/ropsten', async (req, res) => {
     var timeAvailable = value/rate * 1000;
 
     // sending amount in wei
-    await funcLib.useFunds(xbanter, web3.utils.toWei(value.toString(), 'szabo'));
+    await funcLib.useFunds(customer, web3.utils.toWei(value.toString(), 'szabo'));
 
+    console.log('1');
+    
     // sending value in finney
     var finneyAmount = value /1000;
     await funcLib.deposit(xbanter, finneyAmount, customer, chain)
 
+    console.log('2');
     // time stamp in unix
     var ts1 = Math.round((new Date()).getTime() / 1000);
 
@@ -61,7 +64,7 @@ app.get('/rinkeby', async (req, res) => {
     console.log(rate);
 
     // sending amount in wei
-    await funcLib.useFunds(xbanter, web3.utils.toWei(value, 'szabo'));
+    await funcLib.useFunds(xbanter, web3.utils.toWei(value.toString(), 'szabo'));
 
     // sending value in finney
     var finneyAmount = value / 1000;
