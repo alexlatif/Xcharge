@@ -3,230 +3,272 @@ const xChargeContract = require('./Xcharge_web3');
 const simpleChargeContract = require('./SimpleCharger_web3');
 const sendTx = require('./web3_sendTx');
 const read = require('./web3_call');
+const accounts = require('./accounts');
+
+const kovanProvider = new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545');
+const kovanContract = accounts.contract.test_kovan_x_charge;
+const ropstenProvider = new Web3.providers.HttpProvider(
+  'HTTP://127.0.0.1:8545'
+);
+ropstenContract = accounts.contract.test_kovan_simple_charger;
+const rinkebyProvider = new Web3.providers.HttpProvider(
+  'HTTP://127.0.0.1:8545'
+);
+rinkebyContract = accounts.contract.test_kovan_simple_charger;
 
 async function sendTxToKovan(from, privateKey, method, valueInFinney) {
   return await sendTx(
     from,
-    accounts.contract.test_kovan_x_charge,
+    kovanContract,
     method,
     valueInFinney,
     privateKey,
-    new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545')
+    kovanProvider
   );
 }
 
 async function callFromKovan(from, method, valueInFinney, decodeInto) {
   return await read(
     from,
-    accounts.contract.test_kovan_simple_charger,
+    kovanContract,
     method,
     valueInFinney,
     decodeInto,
-    new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545')
+    kovanProvider
   );
 }
 
 async function sendTxToRopsten(from, privateKey, method, valueInFinney) {
   return await sendTx(
     from,
-    accounts.contract.test_kovan_x_charge,
+    ropstenContract,
     method,
     valueInFinney,
     privateKey,
-    new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545')
+    ropstenProvider
   );
 }
 
 async function callFromRopsten(from, method, valueInFinney, decodeInto) {
   return await read(
     from,
-    accounts.contract.test_kovan_simple_charger,
+    ropstenContract,
     method,
     valueInFinney,
     decodeInto,
-    new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545')
+    ropstenProvider
   );
 }
 
 async function sendTxToRinkeby(from, privateKey, method, valueInFinney) {
   return await sendTx(
     from,
-    accounts.contract.test_kovan_x_charge,
+    rinkebyContract,
     method,
     valueInFinney,
     privateKey,
-    new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545')
+    rinkebyProvider
   );
 }
 
 async function callFromRinkeby(from, method, valueInFinney, decodeInto) {
   return await read(
     from,
-    accounts.contract.test_kovan_simple_charger,
+    rinkebyContract,
     method,
     valueInFinney,
     decodeInto,
-    new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545')
-  );
-}
-
-// xChargeContract functions
-
-// txData
-// txData = {
-//  from: address,
-//  valueInFinney: unit256 or null
-// }
-async function depositFunds(txData) {
-  const method = xChargeContract.depositFunds();
-  const fromPrivateKey = getPrivateKey(txData.from);
-
-  return await sendTxToKovan(
-    txData.from,
-    fromPrivateKey,
-    method,
-    txData.valueInFinney
-  );
-}
-
-// txData
-// txData = {
-//  from: address,
-//  valueInFinney: unit256 or null
-// }
-async function reclaimFunds(txData) {
-  const method = xChargeContract.reclaimFunds();
-  const fromPrivateKey = getPrivateKey(txData.from);
-
-  return await sendTxToKovan(
-    txData.from,
-    fromPrivateKey,
-    method,
-    txData.valueInFinney
-  );
-}
-
-// txData, methodParam
-// txData = {
-//  from: address,
-//  valueInFinney: unit256 or null
-// }
-// methodParam = {
-//   user: address,
-//   amount: unit256
-// }
-async function useFunds(txData, methodParam) {
-  const method = xChargeContract.useFunds(methodParam.user, methodParam.amount);
-  const fromPrivateKey = getPrivateKey(txData.from);
-
-  return await sendTxToKovan(
-    txData.from,
-    fromPrivateKey,
-    method,
-    txData.valueInFinney
-  );
-}
-
-// txData, methodParam
-// txData = {
-//  from: address,
-//  valueInFinney: unit256 or null
-// }
-// methodParam = {
-//   user: address
-// }
-async function refund(txData, methodParam) {
-  const method = xChargeContract.refund(methodParam.user);
-  const fromPrivateKey = getPrivateKey(txData.from);
-
-  return await sendTxToKovan(
-    txData.from,
-    fromPrivateKey,
-    method,
-    txData.valueInFinney
+    rinkebyProvider
   );
 }
 
 function getPrivateKey(from) {
-  return accounts.user[from].private_key;
+  const name = accounts.addressToName[from];
+  return accounts.user[name].private_key;
+}
+
+//  sender: address,
+//  valueInFinney: unit256
+async function depositFunds(sender, valueInFinney) {
+  const method = xChargeContract.depositFunds();
+  const fromPrivateKey = getPrivateKey(sender);
+
+  return await sendTxToKovan(sender, fromPrivateKey, method, valueInFinney);
+}
+
+//  sender: address
+async function reclaimFunds(sender) {
+  const method = xChargeContract.reclaimFunds();
+  const fromPrivateKey = getPrivateKey(sender);
+
+  return await sendTxToKovan(sender, fromPrivateKey, method, null);
+}
+
+//  user: address
+//  amount: unit256
+async function useFunds(user, amount) {
+  const method = xChargeContract.useFunds(user, amount);
+  const sender = accounts.user.node.address;
+  const fromPrivateKey = getPrivateKey(sender);
+
+  return await sendTxToKovan(sender, fromPrivateKey, method, null);
+}
+
+//  sender: address,
+//  valueInFinney: unit256
+//  user: address
+async function refund(sender, valueInFinney, user) {
+  const method = xChargeContract.refund(user);
+  const fromPrivateKey = getPrivateKey(sender);
+
+  return await sendTxToKovan(sender, fromPrivateKey, method, valueInFinney);
 }
 
 // view
-
+// chain: ropsten | rinkeby
 async function kind(chain) {
   const method = simpleChargeContract.kind();
-  const from = accounts.user.node.address;
+  const sender = accounts.user.node.address;
 
+  let energyType = null;
   if (chain === 'ropsten') {
-    return await callFromRopsten(from, method, null, 'uint8');
+    energyType = await callFromRopsten(sender, method, null, 'uint8');
   } else {
-    return await callFromRinkeby(from, method, null, 'uint8');
+    energyType = await callFromRinkeby(sender, method, null, 'uint8');
   }
+
+  if (energyType === 0) {
+    energyType = 'Fossil';
+  } else if (energyType === 1) {
+    energyType = 'Nuclear';
+  } else {
+    energyType = 'Green';
+  }
+
+  return energyType;
 }
 // view
+// chain: ropsten | rinkeby
 async function name(chain) {
   const method = simpleChargeContract.name();
-  const from = accounts.user.node.address;
+  const sender = accounts.user.node.address;
 
   if (chain === 'ropsten') {
-    return await callFromRopsten(from, method, null, 'string');
+    return await callFromRopsten(sender, method, null, 'string');
   } else {
-    return await callFromRinkeby(from, method, null, 'string');
+    return await callFromRinkeby(sender, method, null, 'string');
   }
 }
 // view
+// chain: ropsten | rinkeby
 async function rate(chain) {
   const method = simpleChargeContract.rate();
-  const from = accounts.user.node.address;
+  const sender = accounts.user.node.address;
 
   if (chain === 'ropsten') {
-    return await callFromRopsten(from, method, null, 'uint256');
+    return await callFromRopsten(sender, method, null, 'uint256');
   } else {
-    return await callFromRinkeby(from, method, null, 'uint256');
+    return await callFromRinkeby(sender, method, null, 'uint256');
   }
 }
 // view
+// chain: ropsten | rinkeby
 async function showBalance(chain) {
   const method = simpleChargeContract.showBalance();
-  const from = accounts.user.node.address;
+  const sender = accounts.user.node.address;
 
   if (chain === 'ropsten') {
-    return await callFromRopsten(from, method, null, 'uint256');
+    return await callFromRopsten(sender, method, null, 'uint256');
   } else {
-    return await callFromRinkeby(from, method, null, 'uint256');
+    return await callFromRinkeby(sender, method, null, 'uint256');
   }
 }
 // view
+// user: address
+// chain: ropsten | rinkeby
 async function showFundsOf(user, chain) {
   const method = simpleChargeContract.showFundsOf(user);
-  const from = accounts.user.node.address;
+  const sender = accounts.user.node.address;
 
   if (chain === 'ropsten') {
-    return await callFromRopsten(from, method, null, 'uint256');
+    return await callFromRopsten(sender, method, null, 'uint256');
   } else {
-    return await callFromRinkeby(from, method, null, 'uint256');
+    return await callFromRinkeby(sender, method, null, 'uint256');
   }
 }
 
-async function startCharging(from, user, timestamp, chain) {
-  return contract.methods.startCharging(user, timestamp).encodeABI();
+// sender: address
+// user: address
+// timestamp: unit256
+// chain: ropsten | rinkeby
+async function startCharging(sender, user, timestamp, chain) {
+  const method = simpleChargeContract.startCharging(user, timestamp);
+  const privateKey = getPrivateKey(sender);
+
+  if (chain === 'ropsten') {
+    return await sendTxToRopsten(sender, privateKey, method, null);
+  } else {
+    return await sendTxToRinkeby(sender, privateKey, method, null);
+  }
 }
 
-async function stopCharging(user, amount, timestamp) {
-  return contract.methods.stopCharging(user, amount, timestamp).encodeABI();
+// sender: address
+// user: address
+// timestamp: unit256
+// chain: ropsten | rinkeby
+async function stopCharging(sender, user, amount, timestamp, chain) {
+  const method = simpleChargeContract.stopCharging(user, amount, timestamp);
+  const privateKey = getPrivateKey(sender);
+
+  if (chain === 'ropsten') {
+    return await sendTxToRopsten(sender, privateKey, method, null);
+  } else {
+    return await sendTxToRinkeby(sender, privateKey, method, null);
+  }
 }
 
-async function deposit(user) {
-  return contract.methods.deposit(user).encodeABI();
+// sender: address
+// user: address
+// valueInFinney: unit256
+// chain: ropsten | rinkeby
+async function deposit(sender, valueInFinney, user, chain) {
+  const method = simpleChargeContract.deposit(user);
+  const privateKey = getPrivateKey(sender);
+
+  if (chain === 'ropsten') {
+    return await sendTxToRopsten(sender, privateKey, method, valueInFinney);
+  } else {
+    return await sendTxToRinkeby(sender, privateKey, method, valueInFinney);
+  }
 }
 
-async function reclaim(user) {
-  return contract.methods.reclaim(user).encodeABI();
+// user: address
+// chain: ropsten | rinkeby
+async function reclaim(user, chain) {
+  const method = simpleChargeContract.reclaim(user);
+  const sender = accounts.user.node.address;
+  const privateKey = getPrivateKey(sender);
+
+  if (chain === 'ropsten') {
+    return await sendTxToRopsten(sender, privateKey, method, null);
+  } else {
+    return await sendTxToRinkeby(sender, privateKey, method, null);
+  }
 }
 
 module.exports = {
+  user: accounts.user,
   depositFunds: depositFunds,
   reclaimFunds: reclaimFunds,
   useFunds: useFunds,
-  refund: refund
+  refund: refund,
+  deposit: deposit,
+  reclaim: reclaim,
+  stopCharging: stopCharging,
+  startCharging: startCharging,
+  showFundsOf: showFundsOf,
+  showBalance: showBalance,
+  rate: rate,
+  name: name,
+  kind: kind
 };

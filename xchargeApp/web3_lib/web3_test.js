@@ -1,56 +1,92 @@
-const Web3 = require('web3');
-const xChargeContract = require('./Xcharge_web3');
-const simpleChargeContract = require('./SimpleCharger_web3');
-const accounts = require('./accounts');
-const sendTx = require('./web3_sendTx');
-const read = require('./web3_call');
+const lib = require('./index');
 
-async function testXCharge() {
-  const method = xChargeContract.depositFunds();
-  const valueInFinney = 4;
-  return await sendTx(
-    accounts.user.test.address,
-    accounts.contract.test_kovan_x_charge,
-    method,
-    valueInFinney,
-    accounts.user.test.private_key,
-    new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545')
-  );
-}
+// lib.kind('ropsten').then(function(result) {
+//   console.log('kind', result);
+// });
+//
+// lib.name('ropsten').then(function(result) {
+//   console.log('name', result);
+// });
+//
+// lib.rate('ropsten').then(function(result) {
+//   console.log('rate', result);
+// });
+//
+// lib.showBalance('ropsten').then(function(result) {
+//   console.log('showBalance contract', result);
+// });
+//
+// lib.showFundsOf(lib.user.test.address, 'ropsten').then(function(result) {
+//   console.log('showFundsOf', result);
+// });
 
-async function testSimpleCharge() {
-  const method = simpleChargeContract.startCharging(
-    accounts.user.test.address,
-    Date.now()
-  );
-  return await sendTx(
-    accounts.user.test.address,
-    accounts.contract.test_kovan_simple_charger,
-    method,
-    null,
-    accounts.user.test.private_key,
-    new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545')
-  );
-}
+// lib
+//   .deposit(
+//     lib.user.test.address,
+//     40,
+//     lib.user.customer.address,
+//     'ropsten'
+//   )
+//   .then(function() {
+//     console.log('deposit -> OK.');
+//     lib
+//       .showFundsOf(lib.user.customer.address, 'ropsten')
+//       .then(function(result) {
+//         console.log('showFundsOf customer', result);
+//       });
+//   });
 
-async function testSimpleChargeCall() {
-  const method = simpleChargeContract.showFundsOf(accounts.user.test.address);
-  return await read(
-    accounts.user.test.address,
-    accounts.contract.test_kovan_simple_charger,
-    method,
-    null,
-    'uint256',
-    new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545')
-  );
-}
+// lib.reclaim(lib.user.customer.address, 'ropsten').then(function() {
+//   console.log('reclaim -> OK.');
+//   lib.showFundsOf(lib.user.customer.address, 'ropsten').then(function(result) {
+//     console.log('showFundsOf customer', result);
+//   });
+// });
 
-// function for kovan, ropsten, rinkeby
+// lib
+//   .startCharging(
+//     lib.user.test.address,
+//     lib.user.customer.address,
+//     Date.now(),
+//     'ropsten'
+//   )
+//   .then(function() {
+//     console.log('startCharging -> OK.');
+//   });
+//
+// lib
+//   .stopCharging(
+//     lib.user.test.address,
+//     lib.user.customer.address,
+//     30000,
+//     Date.now(),
+//     'ropsten'
+//   )
+//   .then(function() {
+//     console.log('stopCharging -> OK.');
+//     lib
+//       .showFundsOf(lib.user.customer.address, 'ropsten')
+//       .then(function(result) {
+//         console.log('showFundsOf customer', result);
+//       });
+//   });
 
-testXCharge().then(function() {
-  console.log(':)');
+lib.depositFunds(lib.user.test.address, 4).then(function() {
+  console.log('depositFunds -> OK.');
 });
+// lib.reclaimFunds(lib.user.test.address).then(function() {
+//   console.log('reclaimFunds -> OK.');
+// });
 
-testSimpleChargeCall().then(function(result) {
-  console.log(':)', result);
-});
+//  user: address
+//  amount: unit256
+// lib.useFunds(lib.user.test.address, 1).then(function() {
+//   console.log('useFunds -> OK.');
+// });
+
+//  sender: address,
+//  valueInFinney: unit256
+//  user: address
+// lib.refund(lib.user.test.address, 40, lib.user.test.address).then(function() {
+//   console.log('refund -> OK.');
+// });
