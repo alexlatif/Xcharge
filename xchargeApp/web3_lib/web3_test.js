@@ -38,6 +38,8 @@ async function testRead() {
   );
 }
 
+lib.getCustomerBalanceOnKovan().then(console.log);
+
 //testRead();
 // lib
 //   .deposit(
@@ -90,10 +92,10 @@ async function testRead() {
 //       });
 //   });
 
-async function depositCustomerFunds() {
-  const reuslt = await lib.depositFunds(lib.user.customer.address, 4);
-  console.log(reuslt);
-}
+// async function depositCustomerFunds() {
+//   const reuslt = await lib.depositFunds(lib.user.customer.address, 4);
+//   console.log(reuslt);
+// }
 
 //depositCustomerFunds();
 // lib.reclaimFunds(lib.user.test.address).then(function() {
