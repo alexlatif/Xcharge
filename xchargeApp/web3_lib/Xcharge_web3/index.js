@@ -21,9 +21,14 @@ function refund(user) {
   return contract.methods.refund(user).encodeABI();
 }
 
+function showFundsOf(user) {
+  return contract.methods.showFundsOf(user).encodeABI();
+}
+
 module.exports = {
   depositFunds: depositFunds,
   reclaimFunds: reclaimFunds,
   useFunds: useFunds,
-  refund: refund
+  refund: refund,
+  showFundsOf: showFundsOf
 };
