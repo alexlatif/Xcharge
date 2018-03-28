@@ -15,7 +15,7 @@
   },
   "contract": {
     "ropsten": "0x13e0825fb29bd62f89f24b0a48f48fd6ccc712c8",
-    "kovan": "0x573703f872ace69e8de306b9a59dcec86fc2bf8b",
+    "kovan": "0xc744960af7f97ab025b8e8690e3136ef1b044761",
     "rinkeby": "0x48462577de7ed5bc98719f5830b7afd445f2c34b",
     "test_kovan_x_charge": "0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84",
     "test_kovan_simple_charger": "0x62d69f6867A0A084C6d313943dC22023Bc263691"
