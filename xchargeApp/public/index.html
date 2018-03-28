@@ -64,14 +64,12 @@
             document.getElementById('bBut').style.cssText = 'display: none'
             document.getElementById('stopBut').style.cssText = 'background-color: red; color: white; font-size: 50px;width: 300px;height: 100px; padding-top: 30px; margin-top: 350px; position: absolute; left: 30px;'
             
-            //TODO: wait for payments + new axios loop
+            //TODO: wait for payments
 
             axios.get(url + 'ropsten')
                 .then((response) => {
-                    if(response.success){
-                        console.log('has started A')
-                        // TODO: stop button gone as json is after timeout
-                    }
+                    console.log('has started A')
+                    // TODO: start charging 
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -88,10 +86,8 @@
 
             axios.get(url + 'rinkeby')
                 .then((response) => {
-                    if (response.success) {
                         console.log('has started B')
                         // TODO: start charging 
-                    }
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -105,16 +101,27 @@
             document.getElementById('bBut').style.cssText = '    background-color: white; color: black; height: 100px; width: 100px; font-size: 50px; padding-top: 30px; margin-top: 320px; position: absolute; left: 213px;'
             
             axios.get(url + 'stop')
+                .then((response) => {
+                    console.log('balance can be updated')
+                    // TODO: getBalance kovan
+                })
                 .catch(function (error) {
                     console.log(error);
                 });
         }
 
-        var kovanContract;
-        var ropstenContract;
-        var rinkebyContract;
-
         // need Xcharge - funds[balance] && simplcharger - rate, energy
+        
+       (function getStuff() {
+            axios.get(url + 'getstuff')
+               .then((response) => {
+                   console.log('balance + rates & energy type', JSON.parse(response.data))
+                   // TODO: getBalance kovan
+               })
+               .catch(function (error) {
+                   console.log(error);
+               });
+        })()
 
     </script>
     <script type="text/javascript" src="js/eventHandlers.js" />

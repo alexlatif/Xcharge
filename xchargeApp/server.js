@@ -20,6 +20,8 @@ var value;
 var ts1;
 var chain;
 
+var hasStarted = false;
+
 app.get('/ropsten', async (req, res) => {
     console.log('kovan node to ropsten')
     runningPi = 'A';
@@ -46,6 +48,7 @@ app.get('/ropsten', async (req, res) => {
     client.publish('flowA', '1')
 
     console.log('3');
+    hasStarted = true;
 
     timeout = setTimeout(() => {
         client.publish('flowA', '0')
@@ -121,6 +124,31 @@ app.get('/stop', async (req, res) => {
 
     console.log('3');
     res.json({ "success": true })
+})
+
+app.get('/getstuff', async (req, res) => {
+    // read only so can read response from infura
+    var balance = await funcLib.getCustomerBalanceOnKovan(customer);
+
+    var energyRop = await funcLib.kind('ropsten')
+    var rateRop = await funcLib.rate('ropsten')
+    var nameRop = await funcLib.name('ropsten')
+
+    var energyRink = await funcLib.kind('rinkby')
+    var rateRink = await funcLib.rate('rinkby')
+    var nameRink = await funcLib.name('rinkby')
+
+    var obj = {
+        balance: balance,
+        energyRop: energyRop,
+        rateRop: rateRop,
+        nameRop: nameRop,
+        energyRink: energyRink,
+        rateRink: rateRink,
+        nameRink: nameRink
+    }
+
+    res.json(JSON.stringify(obj))
 })
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
