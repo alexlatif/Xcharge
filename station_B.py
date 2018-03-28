@@ -51,7 +51,7 @@ def on_connect(client, userdata, flags, rc):
 
     # Subscribing in on_connect() - if we lose the connection and
     # reconnect then subscriptions will be renewed.
-    client.subscribe("Xcharge/switch")
+    client.subscribe("Xcharge/switchB")
 
 
 # The callback for when a PUBLISH message is received from the server.
