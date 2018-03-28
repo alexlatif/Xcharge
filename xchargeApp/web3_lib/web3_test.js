@@ -1,25 +1,44 @@
 const lib = require('./index');
 
-// lib.kind('ropsten').then(function(result) {
-//   console.log('kind', result);
-// });
-//
-// lib.name('ropsten').then(function(result) {
-//   console.log('name', result);
-// });
-//
-// lib.rate('ropsten').then(function(result) {
-//   console.log('rate', result);
-// });
-//
-// lib.showBalance('ropsten').then(function(result) {
-//   console.log('showBalance contract', result);
-// });
-//
-// lib.showFundsOf(lib.user.test.address, 'ropsten').then(function(result) {
-//   console.log('showFundsOf', result);
-// });
+async function testRead() {
+  const ropstenKind = await lib.kind('ropsten');
+  console.log('ropsten kind', ropstenKind);
+  const ropstenName = await lib.name('ropsten');
+  console.log('ropsten name', ropstenName);
+  const ropstenRate = await lib.rate('ropsten');
+  console.log('ropsten rate', ropstenRate);
+  const ropstenShowBalance = await lib.showBalance('ropsten');
+  console.log('ropsten show balance of contract', ropstenShowBalance);
+  const ropstenShowFundsOf = await lib.showFundsOf(
+    lib.user.node.address,
+    'ropsten'
+  );
+  console.log(
+    'ropsten show funds of user:',
+    lib.user.node.address,
+    ropstenShowFundsOf
+  );
 
+  const rinkebyKind = await lib.kind('rinkeby');
+  console.log('rinkeby kind', rinkebyKind);
+  const rinkebyName = await lib.name('rinkeby');
+  console.log('rinkeby name', rinkebyName);
+  const rinkebyRate = await lib.rate('rinkeby');
+  console.log('rinkeby rate', rinkebyRate);
+  const rinkebyShowBalance = await lib.showBalance('rinkeby');
+  console.log('rinkeby show balance of contract', rinkebyShowBalance);
+  const rinkebyShowFundsOf = await lib.showFundsOf(
+    lib.user.node.address,
+    'rinkeby'
+  );
+  console.log(
+    'rinkeby show funds of user:',
+    lib.user.node.address,
+    rinkebyShowFundsOf
+  );
+}
+
+//testRead();
 // lib
 //   .deposit(
 //     lib.user.test.address,
@@ -71,9 +90,12 @@ const lib = require('./index');
 //       });
 //   });
 
-lib.depositFunds(lib.user.test.address, 4).then(function() {
-  console.log('depositFunds -> OK.');
-});
+async function depositCustomerFunds() {
+  const reuslt = await lib.depositFunds(lib.user.customer.address, 4);
+  console.log(reuslt);
+}
+
+//depositCustomerFunds();
 // lib.reclaimFunds(lib.user.test.address).then(function() {
 //   console.log('reclaimFunds -> OK.');
 // });

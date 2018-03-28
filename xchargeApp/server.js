@@ -1,8 +1,8 @@
-
-
 const express = require('express');
 var path = require('path');
 const app = express();
+const Web3 = require('web3');
+const web3 = new Web3();
 
 // Serve up content from public directory
 app.use(express.static(__dirname + '/public'));
@@ -10,71 +10,97 @@ app.use(express.static(__dirname + '/public'));
 var mqtt = require('mqtt')
 var client = mqtt.connect('mqtt://test.mosquitto.org')
 
-
-var kovanContract;
-var ropstenContract;
-var rinkebyContract;
-
 var funcLib = require('./web3_lib/index');
+var xbanter = require('./web3_lib/accounts.json').user.node.address;
+var customer = require('./web3_lib/accounts.json').user.customer.address; 
 
-app.get('/ropsten', (req, res) => {
+var timeout;
+var rate;
+var value;
+
+app.get('/ropsten', async (req, res) => {
     console.log('kovan node to ropsten')
     runningPi = 'A';
-    var rate = funcLib.rate('ropsten');
-    var available;
+    var chain = 'ropsten'
+    rate = await funcLib.rate(chain); // 500
+    value = 10000;  // 20 seconds @ 500/s rate (in szabo)
+    var timeAvailable = value/rate * 1000;
 
-    //TODO: Xcharge use funds
+    // sending amount in wei
+    await funcLib.useFunds(xbanter, web3.utils.toWei(value.toString(), 'szabo'));
 
-   // value availble + rate call
+    // sending value in finney
+    var finneyAmount = value /1000;
+    await funcLib.deposit(xbanter, finneyAmount, customer, chain)
 
-    //TODO: simpleCharger deposit (with time stamp?)
+    // time stamp in unix
+    var ts1 = Math.round((new Date()).getTime() / 1000);
 
-    //TODO: deposit -> startedCharging
-
-
-    // logic of setTimout to publish stop!! i think it is better to find amountoffunds and divide by rate
-    // to get max time
-    // if timeout hit Funds[user] = 0
+    await funcLib.startCharging(xbanter, customer, ts1, chain)
 
     client.publish('flowA', '1')
+
+    timeout = setTimeout(async () => {
+        client.publish('flowA', '0')
+        var ts2 = Math.round((new Date()).getTime() / 1000);
+        var sendAmount = value / rate;
+        await funcLib.stopCharging(customer, sendAmount, ts2);
+    }, timeAvailable);
+
     res.json({"success": true})
 })
 
 
-app.get('/rinkeby', (req, res) => {
+app.get('/rinkeby', async (req, res) => {
     runningPi = 'B';
     console.log('kovan node to rinkeby')
-    // var rate = funcLib.rate('rinkeby');
-    var available;
+    var chain = 'rinkeby'
+    rate = await funcLib.rate(chain);
+    value = 10000;  // 20 seconds @ 500/s rate (in szabo)
+    var timeAvailable = value / rate * 1000;
+    console.log(rate);
 
-    //TODO: Xcharge use funds
+    // sending amount in wei
+    await funcLib.useFunds(xbanter, web3.utils.toWei(value, 'szabo'));
 
-    //TODO: simpleCharger deposit (with time stamp?)
-    //timestamp to find end balance
+    // sending value in finney
+    var finneyAmount = value / 1000;
+    await funcLib.deposit(xbanter, finneyAmount, customer, chain)
 
-    //TODO: deposit calls 1) showFundsOf 2) rate 3) startedCharging
+    // time stamp in unix
+    var ts1 = Math.round((new Date()).getTime() / 1000);
 
-    // logic of setTimout to publish stop!! i think it is better to find amountoffunds and divide by rate
-    // to get max time
-    // if timeout hit Funds[user] = 0
+    await funcLib.startCharging(xbanter, customer, ts1, chain)
 
     client.publish('flowB', '1')
+
+    timeout = setTimeout(async () => {
+        client.publish('flowB', '0')
+        var ts2 = Math.round((new Date()).getTime() / 1000);
+        var sendAmount = value / rate;
+        await funcLib.stopCharging(customer, sendAmount, ts2)
+    }, timeAvailable);
+
     res.json({ "success": true })
 })
 
-app.get('/stop', (req, res) => {
+app.get('/stop', async (req, res) => {
     console.log('stop')
     client.publish('flowA', '0')
     client.publish('flowB', '0')
 
-    // clears interval
-    // find amount using rate * time
-    // reset rate and timestamp to zero
-    //TODO:  1)stop 2)reduce
+    var ts2 = Math.round((new Date()).getTime() / 1000);
+    await funcLib.stopCharging(customer, value, ts2)
 
-    //TODO: stop charging event -> reclaim funds function
-    
-    // TODO: 3)deposit in Xcharge
+    var sendAmount = (value / rate) - (ts2 - ts1);
+    clearTimeout(timeout);
+    value = 0;
+    rate = 0;
+    await funcLib.stopCharging(customer, sendAmount, ts2)
+
+    await funcLib.reclaim(customer);
+
+    await funcLib.depositFunds(value - (sendAmount * rate));
     res.json({ "success": true })
 })
 
