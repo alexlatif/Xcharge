@@ -38,7 +38,7 @@ async function testRead() {
   );
 }
 
-lib.getCustomerBalanceOnKovan().then(console.log);
+lib.getCustomerBalanceOnKovan(lib.user.customer.address).then(console.log);
 
 //testRead();
 // lib

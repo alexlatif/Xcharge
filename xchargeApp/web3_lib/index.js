@@ -19,10 +19,14 @@ if (isTest) {
   kovanProvider = new Web3.providers.HttpProvider('HTTP://10.125.100.29:8545');
   kovanContract = accounts.contract.test_kovan_x_charge;
 
-  ropstenProvider = new Web3.providers.HttpProvider('HTTP://10.125.100.29:8545');
+  ropstenProvider = new Web3.providers.HttpProvider(
+    'HTTP://10.125.100.29:8545'
+  );
   ropstenContract = accounts.contract.test_kovan_simple_charger;
 
-  rinkebyProvider = new Web3.providers.HttpProvider('HTTP://10.125.100.29:8545');
+  rinkebyProvider = new Web3.providers.HttpProvider(
+    'HTTP://10.125.100.29:8545'
+  );
   rinkebyContract = accounts.contract.test_kovan_simple_charger;
 
   nodeSender = accounts.user.test.address;
@@ -285,10 +289,11 @@ async function reclaim(user, chain) {
   }
 }
 
-async function getCustomerBalanceOnKovan() {
-  const web3 = new Web3(kovanProvider);
-  const balance = await web3.eth.getBalance(accounts.user.customer.address);
-  return balance;
+async function getCustomerBalanceOnKovan(user) {
+  const method = xChargeContract.showFundsOf(user);
+  const sender = nodeSender;
+
+  return await callFromKovan(sender, method, null, 'uint256');
 }
 
 module.exports = {
