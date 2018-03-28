@@ -1,5 +1,4 @@
 const Web3 = require('web3');
-const Tx = require('ethereumjs-tx');
 const xChargeContract = require('./Xcharge_web3');
 const simpleChargeContract = require('./SimpleCharger_web3');
 const accounts = require('./accounts');
