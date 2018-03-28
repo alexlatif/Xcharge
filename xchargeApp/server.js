@@ -18,11 +18,12 @@ var timeout;
 var rate;
 var value;
 var ts1;
+var chain;
 
 app.get('/ropsten', async (req, res) => {
     console.log('kovan node to ropsten')
     runningPi = 'A';
-    var chain = 'ropsten'
+    chain = 'ropsten'
     rate = await funcLib.rate(chain); // 500
     value = 10000;  // 20 seconds @ 500/s rate (in szabo)
     var timeAvailable = value/rate * 1000;
@@ -61,19 +62,21 @@ app.get('/ropsten', async (req, res) => {
 app.get('/rinkeby', async (req, res) => {
     runningPi = 'B';
     console.log('kovan node to rinkeby')
-    var chain = 'rinkeby'
-    rate = await funcLib.rate(chain);
+    chain = 'rinkeby'
+    rate = await funcLib.rate(chain); // 500
     value = 10000;  // 20 seconds @ 500/s rate (in szabo)
     var timeAvailable = value / rate * 1000;
-    console.log(rate);
 
     // sending amount in wei
-    await funcLib.useFunds(xbanter, web3.utils.toWei(value.toString(), 'szabo'));
+    await funcLib.useFunds(customer, web3.utils.toWei(value.toString(), 'szabo'));
+
+    console.log('1');
 
     // sending value in finney
     var finneyAmount = value / 1000;
     await funcLib.deposit(xbanter, finneyAmount, customer, chain)
 
+    console.log('2');
     // time stamp in unix
     ts1 = Math.round((new Date()).getTime() / 1000);
 
@@ -81,11 +84,14 @@ app.get('/rinkeby', async (req, res) => {
 
     client.publish('flowB', '1')
 
+    console.log('3');
+
     timeout = setTimeout(() => {
         client.publish('flowB', '0')
         var ts2 = Math.round((new Date()).getTime() / 1000);
         var sendAmount = value / rate;
-        funcLib.stopCharging(xbanter, customer, sendAmount, ts2, chain)
+        funcLib.stopCharging(xbanter, customer, sendAmount, ts2, chain);
+        console.log('4');
     }, timeAvailable);
 
     res.json({ "success": true })
@@ -98,23 +104,22 @@ app.get('/stop', async (req, res) => {
 
     var ts2 = Math.round((new Date()).getTime() / 1000);
 
-    console.log('1');
 
     var sendAmount = (value / rate) - (ts2 - ts1);
     clearTimeout(timeout);
     value = 0;
     rate = 0;
-    await funcLib.stopCharging(xbanter, customer, sendAmount, ts2)
+    await funcLib.stopCharging(xbanter, customer, sendAmount, ts2, chain)
+
+    console.log('1');
+
+    await funcLib.reclaim(customer, chain);
 
     console.log('2');
 
-    await funcLib.reclaim(customer);
-
-    console.log('3');
-
     await funcLib.depositFunds(xbanter, value - (sendAmount * rate));
 
-    console.log('4');
+    console.log('3');
     res.json({ "success": true })
 })
 
