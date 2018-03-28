@@ -44,6 +44,20 @@ contract XCharge {
         emit Refund(user, msg.value);
     }
 
+    // VFT
+    function showBalance() public view
+        returns(uint256 value) {
+
+        return address(this).balance;
+    }
+
+    // VFT
+    function showFundsOf(address user) public view
+        returns(uint256 value) {
+
+        return funds[user];
+    }
+
     event Deposit(address indexed user, uint256 amount);
     event Reclaimed(address indexed user, uint256 amount);
     event FundsUsed(address indexed user, uint256 amount);
