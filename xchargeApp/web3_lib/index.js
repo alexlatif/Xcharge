@@ -285,6 +285,12 @@ async function reclaim(user, chain) {
   }
 }
 
+async function getCustomerBalanceOnKovan() {
+  const web3 = new Web3(kovanProvider);
+  const balance = await web3.eth.getBalance(accounts.user.customer.address);
+  return balance;
+}
+
 module.exports = {
   user: accounts.user,
   depositFunds: depositFunds,
@@ -299,5 +305,6 @@ module.exports = {
   showBalance: showBalance,
   rate: rate,
   name: name,
-  kind: kind
+  kind: kind,
+  getCustomerBalanceOnKovan: getCustomerBalanceOnKovan
 };
