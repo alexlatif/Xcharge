@@ -29,10 +29,10 @@ contract XCharge {
         if (funds[user] < amount)
             return false;
         else {
-            uint toSend = funds[user];
             funds[user] -= amount;
-            msg.sender.transfer(toSend);
+            msg.sender.transfer(amount);
             emit FundsUsed(user, amount);
+            return true;
         }
     }
 
