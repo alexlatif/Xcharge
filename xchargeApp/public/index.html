@@ -13,12 +13,33 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <h2 id="myGas" style="margin-left: 25px;">Xtokens: 1000</h2>
+    <h3 id="myGas" style="
+    margin-left: 35px;
+    font-size: 30px;
+    font-weight: bolder;">Choose your car wallet</h3>
     <img class="porsche" src="https://upload.wikimedia.org/wikipedia/de/2/2d/Porsche_Wappen.svg" style="
     height: auto;
-    width: 200px;
-    margin-left: 80px;
+    width: 130px;
+    margin-left: 123px;
     margin-top: 30px;">
+    <img src="./back.png" style="
+    height: 40px;
+    position: absolute;
+    margin-left: -187px;
+    margin-top: 85px;"/>
+    <img src="./next.png" style="
+    height: 40px;
+    position: absolute;
+    margin-left: 14px;
+    margin-top: 84px;"/>
+    <h4 id="balance" style="
+    position: absolute;
+    margin-top: 40px;
+    margin-left: 40px;">Your balance: ... eth</h4>
+    <h5 id="con1" style="
+    display: none;">connection established</h5>
+    <h5 id="con2" style="
+    display: none;">we will notify when charging starts</h5>
     <a class="waves-effect waves-light btn" id="aBut" style="
     background-color: white; 
     color: black;
@@ -29,7 +50,13 @@
     position: absolute;
     margin-top: 320px;
     left: 60px;"
-    onclick="pressA()">A</a>
+    onclick="pressA()"><img src="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg"
+    style="
+    height: 40px;"/></a>
+    <h5 id="rate" style="
+    position: absolute;
+    margin-top: 228px;
+    margin-left: 48px;">0.5 eth/kWhr</h5>
     <a class="waves-effect waves-light btn" id="bBut" style="
     background-color: white; 
     color: black;
@@ -40,19 +67,18 @@
     margin-top: 320px;
     position: absolute;
     left: 213px;"
-    onclick="pressB()">B</a>
-    <!-- <span>charging...</span> -->
+    onclick="pressB()"><img src="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg"
+    style="
+    height: 40px;"/></a>
+    <h5 id="rate1" style="
+    position: absolute;
+    margin-left: 212px;
+    margin-top: 228px;">0.8 eth/kWhr</h5>
+    <h4 style="position: absolute;"></h4>
+    <a class="waves-effect waves-light btn" id="processing" style="display: none;" onclick="pressStop()">processing payment...</a>
     <a class="waves-effect waves-light btn" id="stopBut" style="
-    background-color: red; 
-    display: none;
-    color: white;
-    font-size: 50px;
-    width: 300px;
-    height: 100px;
-    margin-left: 40px;
-    padding-top: 30px;
-    margin-top: 60px"
-    onclick="pressStop()">stop</a>
+    display: none;"
+    onclick="pressStop()">stop charge</a>
 
     <script>
 
@@ -62,14 +88,17 @@
         function pressA() {
             document.getElementById('aBut').style.cssText = 'display: none'
             document.getElementById('bBut').style.cssText = 'display: none'
-            document.getElementById('stopBut').style.cssText = 'background-color: red; color: white; font-size: 50px;width: 300px;height: 100px; padding-top: 30px; margin-top: 350px; position: absolute; left: 30px;'
-            
-            //TODO: wait for payments
+            document.getElementById('rate').style.cssText = 'display: none'
+            document.getElementById('rate1').style.cssText = 'display: none'
+            document.getElementById('con1').style.cssText = 'position: absolute; margin-top: 82px; margin-left: 67px; color: green;'
+            // document.getElementById('con2').style.cssText = 'position: absolute; margin-top: 94px; margin-left: 73px;'
+            document.getElementById('processing').style.cssText = 'background-color: orange; color: white; font-size: 20px;width: 300px;height: 100px; padding-top: 34px; margin-top: 328px; margin-left: 10px;position: absolute; left: 30px;'
 
             axios.get(url + 'ropsten')
                 .then((response) => {
                     console.log('has started A')
-                    // TODO: start charging 
+                    document.getElementById('con1').style.cssText = 'display: none'
+                    document.getElementById('stopBut').style.cssText = 'background-color: red; color: white; font-size: 30px;width: 300px;height: 100px; padding-top: 34px; margin-top: 328px; margin-left: 10px;position: absolute; left: 30px;'
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -80,14 +109,16 @@
         function pressB() {
             document.getElementById('aBut').style.cssText = 'display: none'
             document.getElementById('bBut').style.cssText = 'display: none'
-            document.getElementById('stopBut').style.cssText = 'background-color: red; color: white; font-size: 50px;width: 300px;height: 100px; padding-top: 30px; margin-top: 350px; position: absolute; left: 30px;'
-
-            //TODO: wait for payments
+            document.getElementById('rate').style.cssText = 'display: none'
+            document.getElementById('rate1').style.cssText = 'display: none'
+            document.getElementById('con1').style.cssText = 'position: absolute; margin-top: 82px; margin-left: 67px; color: green;'
+            document.getElementById('processing').style.cssText = 'background-color: orange; color: white; font-size: 20px;width: 300px;height: 100px; padding-top: 34px; margin-top: 315px; margin-left: 10px;position: absolute; left: 30px;'
 
             axios.get(url + 'rinkeby')
                 .then((response) => {
                         console.log('has started B')
-                        // TODO: start charging 
+                        document.getElementById('con1').style.cssText = 'display: none'
+                        document.getElementById('stopBut').style.cssText = 'background-color: red; color: white; font-size: 30px;width: 300px;height: 100px; padding-top: 34px; margin-top: 315px; margin-left: 10px;position: absolute; left: 30px;'
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -97,26 +128,36 @@
         //function handlers
         function pressStop() {
             document.getElementById('stopBut').style.cssText = 'display: none'
-            document.getElementById('aBut').style.cssText = '    background-color: white; color: black; height: 100px; width: 100px; font-size: 50px; padding-top: 30px; margin-top: 320px; position: absolute; left: 60px;'
-            document.getElementById('bBut').style.cssText = '    background-color: white; color: black; height: 100px; width: 100px; font-size: 50px; padding-top: 30px; margin-top: 320px; position: absolute; left: 213px;'
-            
+            document.getElementById('processing').style.cssText = 'display: none'
+            document.getElementById('con1').style.cssText = 'display: none'
+            document.getElementById('con2').style.cssText = 'display: none'
+            document.getElementById('aBut').style.cssText = 'background-color: white; color: black; height: 100px; width: 100px; font-size: 50px; padding-top: 30px; margin-top: 320px; position: absolute; left: 60px;'
+            document.getElementById('bBut').style.cssText = 'background-color: white; color: black; height: 100px; width: 100px; font-size: 50px; padding-top: 30px; margin-top: 320px; position: absolute; left: 213px;'
+            document.getElementById('rate').style.cssText = 'position: absolute; margin-left: 60px; margin-top: 228px;'
+            document.getElementById('rate1').style.cssText = 'position: absolute; margin-left: 212px; margin-top: 228px;'
             axios.get(url + 'stop')
                 .then((response) => {
-                    console.log('balance can be updated')
-                    // TODO: getBalance kovan
+                    axios.get(url + 'getstuff')
+                        .then((response) => {
+                            console.log('balance + rates & energy type', JSON.parse(response.data))
+                            var balance = JSON.parse(response.data).balance / 1000000000000000
+                            document.getElementById('balance').innerText = 'Your balance: ' + balance + ' eth';
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
         }
-
-        // need Xcharge - funds[balance] && simplcharger - rate, energy
         
        (function getStuff() {
             axios.get(url + 'getstuff')
                .then((response) => {
                    console.log('balance + rates & energy type', JSON.parse(response.data))
-                   // TODO: getBalance kovan
+                   var balance = JSON.parse(response.data).balance / 1000000000000000
+                   document.getElementById('balance').innerText = 'Your balance: ' + balance + ' eth';
                })
                .catch(function (error) {
                    console.log(error);

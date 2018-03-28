@@ -130,22 +130,8 @@ app.get('/getstuff', async (req, res) => {
     // read only so can read response from infura
     var balance = await funcLib.getCustomerBalanceOnKovan(customer);
 
-    var energyRop = await funcLib.kind('ropsten')
-    var rateRop = await funcLib.rate('ropsten')
-    var nameRop = await funcLib.name('ropsten')
-
-    var energyRink = await funcLib.kind('rinkby')
-    var rateRink = await funcLib.rate('rinkby')
-    var nameRink = await funcLib.name('rinkby')
-
     var obj = {
         balance: balance,
-        energyRop: energyRop,
-        rateRop: rateRop,
-        nameRop: nameRop,
-        energyRink: energyRink,
-        rateRink: rateRink,
-        nameRink: nameRink
     }
 
     res.json(JSON.stringify(obj))
