@@ -29,10 +29,10 @@ contract XCharge {
         if (funds[user] < amount)
             return false;
         else {
-            uint toSend = funds[user];
             funds[user] -= amount;
-            msg.sender.transfer(toSend);
+            msg.sender.transfer(amount);
             emit FundsUsed(user, amount);
+            return true;
         }
     }
 
@@ -42,6 +42,20 @@ contract XCharge {
 
         funds[user] += msg.value;
         emit Refund(user, msg.value);
+    }
+
+    // VFT
+    function showBalance() public view
+        returns(uint256 value) {
+
+        return address(this).balance;
+    }
+
+    // VFT
+    function showFundsOf(address user) public view
+        returns(uint256 value) {
+
+        return funds[user];
     }
 
     event Deposit(address indexed user, uint256 amount);
