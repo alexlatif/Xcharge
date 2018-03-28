@@ -78,13 +78,6 @@ async function send(
   web3Provider
 ) {
   web3.setProvider(web3Provider);
-  console.log('about to send', 
-    addressFrom,
-    addressTo,
-    encodeData,
-    valueInFinney,
-    addressFromPrivateKey,
-    web3Provider)
   return await sendSignedTx(
     addressFrom,
     addressTo,

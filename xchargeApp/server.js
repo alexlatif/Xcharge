@@ -43,11 +43,14 @@ app.get('/ropsten', async (req, res) => {
 
     client.publish('flowA', '1')
 
+    console.log('3');
+
     timeout = setTimeout(async () => {
         client.publish('flowA', '0')
         var ts2 = Math.round((new Date()).getTime() / 1000);
         var sendAmount = value / rate;
-        await funcLib.stopCharging(customer, sendAmount, ts2);
+        await funcLib.stopCharging(xbanter, customer, sendAmount, ts2, chain);
+        console.log('4');
     }, timeAvailable);
 
     res.json({"success": true})
@@ -81,7 +84,7 @@ app.get('/rinkeby', async (req, res) => {
         client.publish('flowB', '0')
         var ts2 = Math.round((new Date()).getTime() / 1000);
         var sendAmount = value / rate;
-        await funcLib.stopCharging(customer, sendAmount, ts2)
+        await funcLib.stopCharging(xbanter, customer, sendAmount, ts2, chain)
     }, timeAvailable);
 
     res.json({ "success": true })
@@ -95,15 +98,23 @@ app.get('/stop', async (req, res) => {
     var ts2 = Math.round((new Date()).getTime() / 1000);
     await funcLib.stopCharging(customer, value, ts2)
 
+    console.log('1');
+
     var sendAmount = (value / rate) - (ts2 - ts1);
     clearTimeout(timeout);
     value = 0;
     rate = 0;
     await funcLib.stopCharging(customer, sendAmount, ts2)
 
+    console.log('2');
+
     await funcLib.reclaim(customer);
 
-    await funcLib.depositFunds(value - (sendAmount * rate));
+    console.log('3');
+
+    await funcLib.depositFunds(xbanter, value - (sendAmount * rate));
+
+    console.log('4');
     res.json({ "success": true })
 })
 

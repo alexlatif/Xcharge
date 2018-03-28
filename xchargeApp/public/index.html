@@ -64,7 +64,15 @@
             document.getElementById('bBut').style.cssText = 'display: none'
             document.getElementById('stopBut').style.cssText = 'background-color: red; color: white; font-size: 50px;width: 300px;height: 100px; padding-top: 30px; margin-top: 350px; position: absolute; left: 30px;'
             
+            //TODO: wait for payments
+
             axios.get(url + 'ropsten')
+                .then((response) => {
+                    if(response.success){
+                        console.log('has started A')
+                        // TODO: stop button gone as json is after timeout
+                    }
+                })
                 .catch(function (error) {
                     console.log(error);
                 });
@@ -76,7 +84,15 @@
             document.getElementById('bBut').style.cssText = 'display: none'
             document.getElementById('stopBut').style.cssText = 'background-color: red; color: white; font-size: 50px;width: 300px;height: 100px; padding-top: 30px; margin-top: 350px; position: absolute; left: 30px;'
 
+            //TODO: wait for payments
+
             axios.get(url + 'rinkeby')
+                .then((response) => {
+                    if (response.success) {
+                        console.log('has started B')
+                        // TODO: start charging 
+                    }
+                })
                 .catch(function (error) {
                     console.log(error);
                 });
